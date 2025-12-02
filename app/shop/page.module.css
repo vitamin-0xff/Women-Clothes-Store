@@ -1,0 +1,113 @@
+.page {
+    padding-top: 120px;
+    /* Header offset */
+    padding-bottom: 4rem;
+}
+
+.header {
+    margin-bottom: 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px solid var(--accent);
+    padding-bottom: 1rem;
+}
+
+.title {
+    font-size: 3rem;
+}
+
+.count {
+    color: #888;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 3rem;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.filterGroup h3 {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+}
+
+.filterGroup ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.filterGroup button {
+    text-align: left;
+    color: #888;
+    transition: color 0.3s ease;
+    font-size: 0.95rem;
+}
+
+.filterGroup button:hover,
+.filterGroup button.active {
+    color: var(--foreground);
+}
+
+.sizes {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.sizes button {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    color: var(--foreground);
+    transition: all 0.3s ease;
+}
+
+.sizes button:hover {
+    border-color: var(--foreground);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+@media (max-width: 1024px) {
+    .layout {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        display: none;
+        /* Hide sidebar on mobile for now, would use a drawer */
+    }
+
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .title {
+        font-size: 2rem;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}

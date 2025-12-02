@@ -1,0 +1,94 @@
+.section {
+    background-color: var(--background);
+}
+
+.heading {
+    text-align: center;
+    margin-bottom: 3rem;
+    font-size: 2.5rem;
+    color: var(--foreground);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    grid-template-rows: 300px 300px;
+    gap: 1.5rem;
+}
+
+.card {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-sm);
+    display: block;
+}
+
+.large {
+    grid-row: span 2;
+}
+
+.imageWrapper {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.6s ease;
+}
+
+.card:hover .image {
+    transform: scale(1.05);
+}
+
+.content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 2rem;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.content h3 {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.linkText {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+}
+
+.card:hover .linkText {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+    }
+
+    .large {
+        grid-row: auto;
+        height: 400px;
+    }
+
+    .card {
+        height: 300px;
+    }
+}
