@@ -1,0 +1,35 @@
+erDiagram
+    %% Visitors planed for the second sprint
+    Visitor {
+        bigint id PK
+        string ip_address
+        string connection_provider
+        text user_agent
+        enum device_type "desktop | mobile | tablet | bot | other"
+        string browser_name
+        string browser_version
+        string os_name
+        string os_version
+        string country
+        string region
+        string city
+        text referrer_url
+        text landing_page
+        string session_id
+        datetime visited_at
+        datetime left_at
+        int duration_seconds
+    }
+
+    VisitorProductView {
+    bigint id PK
+    bigint visitor_id FK
+    uuid product_id FK
+    datetime viewed_at
+}
+
+
+    %% Optional associations
+    %% If you want to link visitor sessions to products viewed or orders later
+    Product ||--o{ VisitorProductView : viewed_by
+    Visitor ||--o{ VisitorProductView : views

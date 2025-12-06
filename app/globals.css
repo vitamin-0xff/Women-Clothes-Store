@@ -6,7 +6,7 @@
   --secondary: #1a1a1a;
   --accent: #2a2a2a;
   --border: #333333;
-  
+
   --font-playfair: var(--font-playfair-display);
   --font-inter: var(--font-inter);
 
@@ -37,7 +37,12 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-playfair), serif;
   font-weight: 400;
   line-height: 1.2;
@@ -80,6 +85,9 @@ button {
   font-size: 0.875rem;
 }
 
+
+/* BUTTON PRIMARY */
+
 .btn-primary {
   background-color: var(--primary);
   color: var(--background);
@@ -90,6 +98,7 @@ button {
   transform: translateY(-2px);
 }
 
+/* BUTTON OUTLINE */
 .btn-outline {
   border: 1px solid var(--foreground);
   color: var(--foreground);
@@ -102,10 +111,21 @@ button {
 
 /* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .animate-fade-in {
   animation: fadeIn 0.8s ease-out forwards;
+}
+
+.text-primary {
+  color: var(--primary);
 }

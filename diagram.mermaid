@@ -1,0 +1,317 @@
+erDiagram
+
+    Customer {
+        uuid id PK
+        string first_name
+        string last_name
+        string email      "unique"
+        string phone      "unique"
+        string password_hash
+        bool is_verified
+        datetime last_login_at
+        datetime created_at
+        datetime updated_at
+    }
+
+    CustomerAddress {
+        int id PK
+        uuid customer_id FK
+        string full_name
+        string phone
+        string country
+        string state
+        string city
+        string zip_code
+        string address_line_1
+        string address_line_2 "nullalbe"
+        bool is_default
+        string type  "shipping | billing"
+    }
+
+    Category {
+        int id PK
+        string name
+        string slug  "unique"
+        string description
+        string image_url
+        int parent_id FK
+        datetime created_at
+    }
+
+    Product {
+        uuid id PK
+        string title
+        string description
+        string slug "unique"
+        uuid category_id FK
+        string brand
+        string material
+        bool is_active
+        float avg_rating
+        int reviews_count
+        string meta_title
+        string meta_description
+        bool is_featured
+        datetime new_until
+        datetime created_at
+        datetime updated_at
+    }
+
+    ProductImage {
+        int id PK
+        uuid product_id FK
+        string url
+        string alt_text
+        int priority
+    }
+
+    Variant {
+        uuid id PK
+        uuid product_id FK
+        string sku  "unique"
+        string color
+        string size
+        float price
+        float compare_price
+        float weight
+        float width
+        float height
+        float depth
+        string barcode
+        datetime created_at
+        datetime updated_at
+    }
+
+    Inventory {
+        int id PK
+        uuid variant_id FK
+        int quantity_available
+        int quantity_reserved
+        int low_stock_threshold
+    }
+
+    InventoryMovement {
+        int id PK
+        uuid variant_id FK
+        string type  "add | remove | reserve | release | return"
+        int quantity
+        string reason
+        datetime created_at
+    }
+
+    Cart {
+        int id PK
+        uuid customer_id FK
+        string status "active | abandoned"
+        datetime created_at
+        datetime updated_at
+    }
+
+    CartItem {
+        int id PK
+        int cart_id FK
+        uuid variant_id FK
+        int quantity
+    }
+
+    %% Base Order
+    Order {
+        uuid id PK
+        string type "customer | guest"
+        string status "pending | paid | packed | shipped | delivered | returned | cancelled"
+        float subtotal_price
+        float discount_amount
+        float tax_amount
+        float shipping_fee
+        float total_price
+        string currency
+        int shipping_address_id FK
+        int billing_address_id FK
+        datetime created_at
+        datetime updated_at
+        datetime paid_at "nullalbe"
+        datetime shipped_at "nullalbe"
+        datetime delivered_at "nullalbe"
+        datetime cancelled_at "nullalbe"
+        string cancel_reason "nullalbe"
+        datetime returned_at "nullalbe"
+        string return_reason "nullalbe"
+    }
+
+    %% ShippingAddress
+    ShippingAddress {
+    int id PK
+    string full_name
+    string phone
+    string country
+    string state
+    string city
+    string zip_code
+    string address_line_1
+    string notes      "delivery instructions"
+    datetime created_at
+    }
+
+
+    %% Specialized Orders
+    CustomerOrder {
+        uuid order_id PK, FK 
+        uuid customer_id FK
+    }
+
+    GuestOrder {
+        uuid order_id PK, FK 
+        string full_name
+        string email
+        string phone
+        string notes
+    }
+
+    OrderItem {
+        int id PK
+        uuid order_id FK
+        uuid variant_id FK
+        string product_title
+        string variant_attributes "JSON snapshot"
+        int quantity
+        float unit_price
+        float total_price
+        datetime returned_at
+        string returned_reason
+    }
+
+    ShippingAddress {
+    int id PK
+    string full_name
+    string phone
+    string country
+    string state
+    string city
+    string zip_code
+    string address_line_1
+    string notes      "delivery instructions"
+    datetime created_at
+    }
+
+    Payment {
+        int id PK
+        uuid order_id FK
+        string provider
+        float amount
+        string currency
+        string status
+        string transaction_reference "nullalbe"
+        float refunded_amount "nullalbe"
+        string refund_reference "nullalbe"
+        datetime created_at
+        datetime paid_at "nullalbe"
+    }
+
+    Wishlist {
+        int id PK
+        uuid customer_id FK
+    }
+
+    WishlistItem {
+        int id PK
+        int wishlist_id FK
+        uuid product_id FK
+    }
+
+    Review {
+        int id PK
+        uuid product_id FK
+        uuid customer_id FK
+        int rating
+        string comment
+        datetime created_at
+        datetime updated_at
+    }
+
+    AdminUser {
+        int id PK
+        string email "unique"
+        string password_hash
+        string role
+        datetime created_at
+    }
+
+    AuditLog {
+        int id PK
+        int admin_id FK
+        string action
+        string target_table
+        string target_id
+        datetime created_at
+    }
+
+    %% RELATIONS
+
+    Customer ||--o{ CustomerAddress : has
+    Customer ||--o{ Cart : has
+    Customer ||--o{ Review : writes
+    Customer ||--o{ Order : places
+
+    Category ||--o{ Product : contains
+    Category ||--o{ Category : parent_of
+
+    Product ||--o{ ProductImage : has
+    Product ||--o{ Variant : has
+    Product ||--o{ Review : rated
+
+    Variant ||--|| Inventory : tracks
+    Variant ||--o{ InventoryMovement : movement
+    Variant ||--o{ CartItem : added
+    Variant ||--o{ OrderItem : sold_as
+
+    Cart ||--o{ CartItem : contains
+
+    Order ||--|| CustomerOrder : child
+    Order ||--|| GuestOrder : child
+    Order ||--o{ OrderItem : contains
+    Order ||--o{ Payment : paid_by
+    Order ||--|| ShippingAddress : ships_to
+
+
+shipping_address_id
+    Wishlist ||--o{ WishlistItem : contains
+    Product ||--o{ WishlistItem : wishlisted
+
+    AdminUser ||--o{ AuditLog : records
+
+
+    %% Tags structure
+
+    
+    TagCategory {
+        int id PK
+        string name
+        string slug
+        string description
+    }
+
+    ProductCategory_TagCategory {
+        int product_category_id FK
+        int tag_category_id FK
+        PK(product_category_id, tag_category_id)
+    }
+
+    Tag {
+        int id PK
+        int tag_category_id FK
+        string name
+        string slug
+    }
+
+    Product_Tag {
+        uuid product_id FK
+        int tag_id FK
+        PK(product_id, tag_id)
+    }
+
+    %% RELATIONS
+    TagCategory ||--o{ Tag : contains
+    Category ||--o{ ProductCategory_TagCategory : links
+    Tag ||--o{ Product_Tag : assigned_to
+    ProductCategory ||--o{ Product_Tag : via tag (indirect)
+
