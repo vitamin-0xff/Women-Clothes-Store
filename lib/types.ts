@@ -5,7 +5,7 @@
  * App response model is the wrapper for all responses
  */
 
-export interface ApiResponse<T> {
+export interface ResponseType<T> {
     success: boolean;
     data: T;
     error: string | null;

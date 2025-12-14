@@ -20,13 +20,14 @@ import type {
     CustomerUpdateRequestDto,
     ProductImageRequest,
     ProductImageUpdateRequest,
+    ResponseType,
     VariantUpdateRequest,
 } from './types';
 
 import api from './appclient';
 
 // Helper for query params (pageable)
-const toPageableParams = (page: number = 0, size: number = 20, sort?: string[]) => ({
+const toPageableParams = (page: number = 1, size: number = 20, sort?: string[]) => ({
     page,
     size,
     ...(sort ? { sort: sort.join(',') } : {}),
@@ -35,157 +36,157 @@ const toPageableParams = (page: number = 0, size: number = 20, sort?: string[]) 
 // ====================== PRODUCTS ======================
 export const productApi = {
     getAll: (page = 0, size = 20) =>
-        api.get<Page<ProductResponse>>('/products', { params: toPageableParams(page, size) }),
+        api.get<ResponseType<Page<ProductResponse>>>('/products', { params: toPageableParams(page, size) }),
 
-    getById: (id: string) => api.get<ProductResponse>(`/products/${id}`),
+    getById: (id: string) => api.get<ResponseType<ProductResponse>>(`/products/${id}`),
 
-    getBySlug: (slug: string) => api.get<ProductResponse>(`/products/slug/${slug}`),
+    getBySlug: (slug: string) => api.get<ResponseType<ProductResponse>>(`/products/slug/${slug}`),
 
     search: (query: string, page = 0, size = 20) =>
-        api.get<Page<ProductResponse>>('/products/search', {
+        api.get<ResponseType<Page<ProductResponse>>>('/products/search', {
             params: { query, ...toPageableParams(page, size) },
         }),
 
     getByCategory: (categoryId: number, page = 0, size = 20) =>
-        api.get<Page<ProductResponse>>(`/products/category/${categoryId}`, {
+        api.get<ResponseType<Page<ProductResponse>>>(`/products/category/${categoryId}`, {
             params: toPageableParams(page, size),
         }),
 
-    create: (data: ProductRequest) => api.post<ProductResponse>('/products', data),
+    create: (data: ProductRequest) => api.post<ResponseType<ProductResponse>>('/products', data),
 
     update: (id: string, data: ProductUpdateRequest) =>
-        api.put<ProductResponse>(`/products/${id}`, data),
+        api.put<ResponseType<ProductResponse>>(`/products/${id}`, data),
 
-    delete: (id: string) => api.delete<void>(`/products/${id}`),
+    delete: (id: string) => api.delete<ResponseType<void>>(`/products/${id}`),
 };
 
 // ====================== CATEGORIES ======================
 export const categoryApi = {
-    getAll: () => api.get<ArrayResponse<CategoryResponseDto>>('/categories'),
+    getAll: () => api.get<ResponseType<ArrayResponse<CategoryResponseDto>>>('/categories'),
 
-    getById: (id: number) => api.get<CategoryResponseDto>(`/categories/${id}`),
+    getById: (id: number) => api.get<ResponseType<CategoryResponseDto>>(`/categories/${id}`),
 
-    getRoot: () => api.get<ArrayResponse<CategoryResponseDto>>('/categories/root'),
+    getRoot: () => api.get<ResponseType<ArrayResponse<CategoryResponseDto>>>('/categories/root'),
 
     getChildren: (parentId: number) =>
-        api.get<ArrayResponse<CategoryResponseDto>>(`/categories/${parentId}/children`),
+        api.get<ResponseType<ArrayResponse<CategoryResponseDto>>>(`/categories/${parentId}/children`),
 
-    create: (data: CategoryRequestDto) => api.post<CategoryResponseDto>('/categories', data),
+    create: (data: CategoryRequestDto) => api.post<ResponseType<CategoryResponseDto>>('/categories', data),
 
     update: (id: number, data: CategoryUpdateRequestDto) =>
-        api.put<UpdateResponse<CategoryResponseDto>>(`/categories/${id}`, data),
+        api.put<ResponseType<UpdateResponse<CategoryResponseDto>>>(`/categories/${id}`, data),
 
-    delete: (id: number) => api.delete<void>(`/categories/${id}`),
+    delete: (id: number) => api.delete<ResponseType<void>>(`/categories/${id}`),
 
-    hardDelete: (id: number) => api.delete<void>(`/categories/${id}/hard`),
+    hardDelete: (id: number) => api.delete<ResponseType<void>>(`/categories/${id}/hard`),
 };
 
 // ====================== CUSTOMERS ======================
 export const customerApi = {
-    getAll: () => api.get<ArrayResponse<CustomerResponseDto>>('/customers'),
+    getAll: () => api.get<ResponseType<ArrayResponse<CustomerResponseDto>>>('/customers'),
 
-    getById: (id: string) => api.get<CustomerResponseDto>(`/customers/${id}`),
+    getById: (id: string) => api.get<ResponseType<CustomerResponseDto>>(`/customers/${id}`),
 
-    create: (data: CustomerRequestDto) => api.post<CustomerResponseDto>('/customers', data),
+    create: (data: CustomerRequestDto) => api.post<ResponseType<CustomerResponseDto>>('/customers', data),
 
     update: (id: string, data: CustomerUpdateRequestDto) =>
-        api.put<UpdateResponse<CustomerResponseDto>>(`/customers/${id}`, data),
+        api.put<ResponseType<UpdateResponse<CustomerResponseDto>>>(`/customers/${id}`, data),
 
-    delete: (id: string) => api.delete<void>(`/customers/${id}`),
+    delete: (id: string) => api.delete<ResponseType<void>>(`/customers/${id}`),
 };
 
 // ====================== CUSTOMER ADDRESSES ======================
 export const customerAddressApi = {
-    getAll: () => api.get<ArrayResponse<CustomerAddressResponseDto>>('/customer-addresses'),
+    getAll: () => api.get<ResponseType<ArrayResponse<CustomerAddressResponseDto>>>('/customer-addresses'),
 
-    getById: (id: number) => api.get<CustomerAddressResponseDto>(`/customer-addresses/${id}`),
+    getById: (id: number) => api.get<ResponseType<CustomerAddressResponseDto>>(`/customer-addresses/${id}`),
 
     getByCustomerId: (customerId: string) =>
-        api.get<ArrayResponse<CustomerAddressResponseDto>>(`/customer-addresses/customer/${customerId}`),
+        api.get<ResponseType<ArrayResponse<CustomerAddressResponseDto>>>(`/customer-addresses/customer/${customerId}`),
 
     create: (data: CustomerAddressRequestDto) =>
-        api.post<CustomerAddressResponseDto>('/customer-addresses', data),
+        api.post<ResponseType<CustomerAddressResponseDto>>('/customer-addresses', data),
 
     update: (id: number, data: CustomerAddressUpdateRequestDto) =>
-        api.put<UpdateResponse<CustomerAddressResponseDto>>(`/customer-addresses/${id}`, data),
+        api.put<ResponseType<UpdateResponse<CustomerAddressResponseDto>>>(`/customer-addresses/${id}`, data),
 
-    delete: (id: number) => api.delete<void>(`/customer-addresses/${id}`),
+    delete: (id: number) => api.delete<ResponseType<void>>(`/customer-addresses/${id}`),
 
-    hardDelete: (id: number) => api.delete<void>(`/customer-addresses/${id}/hard`),
+    hardDelete: (id: number) => api.delete<ResponseType<void>>(`/customer-addresses/${id}/hard`),
 };
 
 // ====================== PRODUCT VARIANTS ======================
 export const variantApi = {
     getAllByProduct: (productId: string, page = 0, size = 20) =>
-        api.get<Page<VariantResponse>>(`/api/v1/products/${productId}/variants`, {
+        api.get<ResponseType<Page<VariantResponse>>>(`/api/v1/products/${productId}/variants`, {
             params: toPageableParams(page, size),
         }),
 
     getById: (productId: string, variantId: string) =>
-        api.get<VariantResponse>(`/api/v1/products/${productId}/variants/${variantId}`),
+        api.get<ResponseType<VariantResponse>>(`/api/v1/products/${productId}/variants/${variantId}`),
 
     create: (productId: string, data: VariantRequest) =>
-        api.post<VariantResponse>(`/api/v1/products/${productId}/variants`, data),
+        api.post<ResponseType<VariantResponse>>(`/api/v1/products/${productId}/variants`, data),
 
     update: (productId: string, variantId: string, data: VariantUpdateRequest) =>
-        api.put<VariantResponse>(`/api/v1/products/${productId}/variants/${variantId}`, data),
+        api.put<ResponseType<VariantResponse>>(`/api/v1/products/${productId}/variants/${variantId}`, data),
 
     delete: (productId: string, variantId: string) =>
-        api.delete<void>(`/api/v1/products/${productId}/variants/${variantId}`),
+        api.delete<ResponseType<void>>(`/api/v1/products/${productId}/variants/${variantId}`),
 };
 
 // ====================== PRODUCT IMAGES ======================
 export const productImageApi = {
     getAllByProduct: (productId: string, page = 0, size = 20) =>
-        api.get<Page<ProductImageResponse>>(`/api/v1/products/${productId}/images`, {
+        api.get<ResponseType<Page<ProductImageResponse>>>(`/api/v1/products/${productId}/images`, {
             params: toPageableParams(page, size),
         }),
 
     getById: (productId: string, imageId: number) =>
-        api.get<ProductImageResponse>(`/api/v1/products/${productId}/images/${imageId}`),
+        api.get<ResponseType<ProductImageResponse>>(`/api/v1/products/${productId}/images/${imageId}`),
 
     create: (productId: string, data: ProductImageRequest) =>
-        api.post<ProductImageResponse>(`/api/v1/products/${productId}/images`, data),
+        api.post<ResponseType<ProductImageResponse>>(`/api/v1/products/${productId}/images`, data),
 
     update: (productId: string, imageId: number, data: ProductImageUpdateRequest) =>
-        api.put<ProductImageResponse>(`/api/v1/products/${productId}/images/${imageId}`, data),
+        api.put<ResponseType<ProductImageResponse>>(`/api/v1/products/${productId}/images/${imageId}`, data),
 
     delete: (productId: string, imageId: number) =>
-        api.delete<void>(`/api/v1/products/${productId}/images/${imageId}`),
+        api.delete<ResponseType<void>>(`/api/v1/products/${productId}/images/${imageId}`),
 };
 
 // ====================== INVENTORY ======================
 export const inventoryApi = {
     getByVariant: (variantId: string) =>
-        api.get<Inventory>(`/api/v1/variants/${variantId}/inventory`),
+        api.get<ResponseType<Inventory>>(`/api/v1/variants/${variantId}/inventory`),
 
     getLowStock: (threshold?: number) =>
-        api.get<ArrayResponse<Inventory>>('/api/v1/variants/{variantId}/inventory/low-stock', {
+        api.get<ResponseType<ArrayResponse<Inventory>>>('/api/v1/variants/{variantId}/inventory/low-stock', {
             params: threshold !== undefined ? { threshold } : {},
         }),
 
     addStock: (variantId: string, quantity: number, referenceId?: string, notes?: string) =>
-        api.post<Inventory>(`/api/v1/variants/${variantId}/inventory/add`, null, {
+        api.post<ResponseType<Inventory>>(`/api/v1/variants/${variantId}/inventory/add`, null, {
             params: { quantity, referenceId, notes },
         }),
 
     removeStock: (variantId: string, quantity: number, referenceId?: string, notes?: string) =>
-        api.post<Inventory>(`/api/v1/variants/${variantId}/inventory/remove`, null, {
+        api.post<ResponseType<Inventory>>(`/api/v1/variants/${variantId}/inventory/remove`, null, {
             params: { quantity, referenceId, notes },
         }),
 
     reserveStock: (variantId: string, quantity: number, referenceId?: string) =>
-        api.post<Inventory>(`/api/v1/variants/${variantId}/inventory/reserve`, null, {
+        api.post<ResponseType<Inventory>>(`/api/v1/variants/${variantId}/inventory/reserve`, null, {
             params: { quantity, referenceId },
         }),
 
     releaseStock: (variantId: string, quantity: number, referenceId?: string) =>
-        api.post<Inventory>(`/api/v1/variants/${variantId}/inventory/release`, null, {
+        api.post<ResponseType<Inventory>>(`/api/v1/variants/${variantId}/inventory/release`, null, {
             params: { quantity, referenceId },
         }),
 
     adjustStock: (variantId: string, newAvailable: number, notes?: string) =>
-        api.post<Inventory>(`/api/v1/variants/${variantId}/inventory/adjust`, null, {
+        api.post<ResponseType<Inventory>>(`/api/v1/variants/${variantId}/inventory/adjust`, null, {
             params: { newAvailable, notes },
         }),
 };
